@@ -1,0 +1,8 @@
+#!/bin/bash
+while ! echo exit | nc $DB_PORT_3306_TCP_ADDR $DB_PORT_3306_TCP_PORT; do sleep 3; done
+mysql -h db -p$DB_ENV_MYSQL_ROOT_PASSWORD -e "CREATE DATABASE $MYSQL_DATABASE CHARACTER SET utf8 COLLATE utf8_bin;"
+mysql -h db -p$DB_ENV_MYSQL_ROOT_PASSWORD -e "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+mysql -h db -p$DB_ENV_MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE. * TO '$MYSQL_USER'@'%';"
+mysql -h db -p$DB_ENV_MYSQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
+
+php -d max_execution_time=300 -S 0.0.0.0:8000 -t /wordpress

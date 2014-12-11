@@ -1,0 +1,36 @@
+db:
+  image: mysql:latest
+  environment:
+    MYSQL_ROOT_PASSWORD: changeme
+dataexample:
+  build: wordpress
+example:
+  build: wordpress_run
+  ports:
+    - "8000:8000"
+  links:
+    - db
+  volumes_from:
+    - dataexample
+  environment:
+    MYSQL_ROOT_PASSWORD: changeme
+    MYSQL_USER: changeme
+    MYSQL_PASSWORD: changeme
+    MYSQL_DATABASE: changeme
+    AUTH_KEY: changeme
+    SECURE_AUTH_KEY: changeme
+    LOGGED_IN_KEY: changeme
+    NONCE_KEY: changeme
+    AUTH_SALT: changeme
+    SECURE_AUTH_SALT: changeme
+    LOGGED_IN_SALT: changeme
+    NONCE_SALT: changeme
+nginx:
+  image: dockerfile/nginx:latest
+  volumes:
+    - nginx.conf:/etc/nginx/sites-enabled/example.conf
+    - nginx/logs:/var/log/nginx
+  links:
+    - example
+  ports:
+    - "80:80"
