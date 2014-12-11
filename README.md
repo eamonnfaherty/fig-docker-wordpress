@@ -8,3 +8,5 @@ Docker setup of wordpress using latest wordpress, nginx, mysql
 # HowTo 
 - Edit fig.yml
 - Edit nginx.conf
+- set up hostname
+- fig up
